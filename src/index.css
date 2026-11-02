@@ -1,0 +1,271 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #080808;
+  --card: #151515;
+  --field: #111111;
+  --raised: #1a1a1a;
+  --line: rgba(255, 255, 255, 0.11);
+  --brand: #fe9e15;
+  --mint: #38d996;
+  --text: #f4efe8;
+  --muted: #a39d94;
+  --bar-h: 7.5rem;
+  /* Keeps the Arc Studio badge clear of the checkout bar. */
+  --studio-watermark-bottom: calc(8.25rem + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 640px) {
+  :root {
+    --bar-h: 4.75rem;
+    --studio-watermark-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', ui-sans-serif, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  overflow-x: clip;
+  min-height: 100dvh;
+}
+
+::selection {
+  background: rgba(254, 158, 21, 0.35);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+@layer components {
+  /* Tactile press feedback on every button-like control. */
+  .press {
+    transition: transform 140ms cubic-bezier(0.3, 0.7, 0.4, 1), background-color 160ms, border-color 160ms, opacity 160ms,
+      box-shadow 160ms;
+  }
+  .press:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+
+  /* Buttons: one base, a size, and a tone. */
+  .btn {
+    @apply press inline-flex min-h-[44px] items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 text-sm font-semibold disabled:cursor-not-allowed;
+  }
+  .btn-lg {
+    @apply h-12 px-6 text-[15px] font-bold;
+  }
+  .btn-primary {
+    @apply bg-brand font-bold text-ink hover:bg-brand-hover disabled:bg-lift disabled:text-faint;
+  }
+  .btn-outline {
+    @apply border border-line text-fg-soft hover:bg-white/5 disabled:opacity-40;
+  }
+  .btn-quiet {
+    @apply text-muted hover:text-white;
+  }
+  .icon-btn {
+    @apply press grid h-11 w-11 shrink-0 place-items-center rounded-xl text-fg-soft hover:bg-white/5 disabled:opacity-40;
+  }
+
+  /* Surfaces and labels. */
+  .panel {
+    @apply rounded-3xl border border-line bg-card;
+  }
+  .well {
+    @apply rounded-2xl border border-line bg-field;
+  }
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.1em] text-muted;
+  }
+  .link {
+    @apply font-semibold text-brand underline decoration-brand/40 underline-offset-2 hover:decoration-brand;
+  }
+}
+
+/* Floating badges step aside while a drawer or sheet is open. */
+.studio-watermark {
+  transition: opacity 160ms;
+}
+html[data-view='receipt'] {
+  --studio-watermark-bottom: 16px;
+}
+html[data-overlay] .studio-watermark {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Faint char-grain on dark surfaces. Static, no motion. */
+.grain {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+/* Receipt perforation: scalloped bottom edge. */
+.ticket-edge {
+  --r: 7px;
+  -webkit-mask: radial-gradient(circle var(--r) at 50% calc(100% + 1px), transparent 98%, #000) 0 0 / calc(var(--r) * 3.2) 100%
+    repeat-x;
+  mask: radial-gradient(circle var(--r) at 50% calc(100% + 1px), transparent 98%, #000) 0 0 / calc(var(--r) * 3.2) 100% repeat-x;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.12);
+    color: var(--brand);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ember {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes ring {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(260%);
+  }
+}
+
+.anim-fade {
+  animation: fade-in 220ms ease-out both;
+}
+.anim-sheet {
+  animation: sheet-up 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-rise {
+  animation: rise 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-bump {
+  animation: bump 320ms ease-out;
+}
+.anim-spin {
+  animation: spin 800ms linear infinite;
+}
+.anim-ember {
+  animation: ember 1.6s ease-in-out infinite;
+}
+.anim-ring {
+  animation: ring 520ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.anim-draw {
+  stroke-dasharray: 32;
+  stroke-dashoffset: 32;
+  animation: draw 420ms 260ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .anim-draw {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Sonner toasts, matched to the dark surface. */
+[data-sonner-toaster] {
+  --normal-bg: #1a1a1a;
+  --normal-text: #f4efe8;
+  --normal-border: rgba(255, 255, 255, 0.11);
+}
