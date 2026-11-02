@@ -47,11 +47,19 @@ Never put a private key in this project.
 ### Scripts
 
 - `bun run dev` starts the dev server.
+- `bun run build` creates the production build in `dist/`.
+- `bun run preview` serves the production build locally.
 - `bun run check` runs lint and type checks.
 
 ### Getting test USDC
 
 Open the menu (top left), choose **Get test USDC**, and request Arc Testnet USDC from the Circle faucet at https://faucet.circle.com. On Arc, USDC is also the gas token, so one balance covers the order and the network fee.
+
+## Deploying to Vercel
+
+1. Import the repository in Vercel. `vercel.json` already sets the Vite framework, the build command and the single-page rewrites.
+2. Under Project Settings, Environment Variables, add `VITE_DOZZIE_WALLET` (and optionally `VITE_WALLETCONNECT_PROJECT_ID`) for Production and Preview. These are read at build time, so redeploy after changing them.
+3. Deploy. Checkout stays disabled if `VITE_DOZZIE_WALLET` is missing.
 
 ## Testing status
 
